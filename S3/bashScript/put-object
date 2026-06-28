@@ -1,1 +1,24 @@
 #!/usr/bin/env bash 
+
+
+# where the files 'll be
+OUTPUT_DIR="D:\AWS-SAA\files"
+
+# check if the DIR exist 
+mkdir -p $OUTPUT_DIR
+
+# Generate random number between 5 and 10
+num_files=$((RANDOM % 6 + 5))
+
+echo "Creating $num_files files..."
+
+for i in $(seq 1 $num_files); do
+    RANDOM_FILES_NAME="$oU file_$i.txt"
+
+    # Generate random content and save it to the file
+    head -c "$size" /dev/urandom | base64 > $RANDOM_FILES_NAME
+done
+
+echo "Done! $num_files files created."
+
+tree $OUTPUT_DIR
