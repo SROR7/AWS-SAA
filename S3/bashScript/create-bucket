@@ -1,16 +1,21 @@
 #!/usr/bin/env bash 
 
+
+BUCKET_NAME=$1
+BUCKET_REGION=$2
+
+
 # check for the bucket name is provided or not  
-if [ -z "$1" ]; then
+if [ -z "$BUCKET_NAME" ]; then
     echo "U need to spcify the bucket name" 
-    exit 1 
+    exit 2
 fi 
 
 # check for the region argument is provided or not 
-if [ -z "$2" ]; then
+if [ -z "$BUCKET_REGION" ]; then
     echo "U need to spcify the region" 
     exit 2 
 fi
 
-aws s3api create-bucket --bucket $1 --region $2 --create-bucket-configuration LocationConstraint=$2
+aws s3api create-bucket --bucket $BUCKET_NAME --region $BUCKET_REGION --create-bucket-configuration LocationConstraint=$BUCKET_REGION
 
