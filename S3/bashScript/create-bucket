@@ -20,3 +20,4 @@ fi
 
 aws s3api create-bucket --bucket $BUCKET_NAME --region $BUCKET_REGION --create-bucket-configuration LocationConstraint=$BUCKET_REGION
 
+echo "=== The Bucket Has Been Deleted Successfully ===" 
