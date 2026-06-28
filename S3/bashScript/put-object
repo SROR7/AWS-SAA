@@ -2,7 +2,7 @@
 
 
 # where the files 'll be
-OUTPUT_DIR="D:\AWS-SAA\files"
+OUTPUT_DIR="files"
 
 # check if the DIR exist 
 mkdir -p $OUTPUT_DIR
