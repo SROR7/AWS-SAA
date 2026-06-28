@@ -3,6 +3,7 @@
 
 BUCKET_NAME=$1
 FILE_NAME=$2
+FILE_PATH=$3
 
 # check for the bucket name is provided or not  
 if [ -z "$BUCKET_NAME" ]; then
@@ -11,10 +12,12 @@ if [ -z "$BUCKET_NAME" ]; then
 fi 
 
 # check for the file name is provided or not  
-if [ -z "$FILE_NAME" ]; then
-    echo "U need to spcify the file name" 
+if [ -z "$FILE_PATH" ]; then
+    echo "U need to spcify the file path" 
     exit 2
 fi 
 
 # the command 
-aws s3api put-object --bucket $BUCKET_NAME --body $FILE_NAME
+aws s3api put-object --bucket $BUCKET_NAME --key $FILE_NAME --body $FILE_PATH
+
+echo "File '$FILE_NAME' uploaded successfully to '$BUCKET_NAME'"
