@@ -1,5 +1,6 @@
 #!/usr/bin/env bash 
 
+echo " === Create A Bucket ===" 
 
 BUCKET_NAME=$1
 BUCKET_REGION=$2
