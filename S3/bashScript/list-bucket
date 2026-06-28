@@ -1,5 +1,5 @@
 #!/usr/bin/env bash 
 
-echo " === List A Object ===" 
+echo " === List A Bcuket ===" 
 
 aws s3 ls

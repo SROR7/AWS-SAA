@@ -1,5 +1,7 @@
 #!/usr/bin/env bash 
 
+echo "=== Syncing Bucket ===" 
+
 set -e
 
 BUCKET_NAME=$1

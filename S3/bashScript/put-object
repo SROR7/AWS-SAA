@@ -1,5 +1,6 @@
 #!/usr/bin/env bash 
 
+echo "=== Puting Objects ===" 
 
 BUCKET_NAME=$1
 FILE_NAME=$2
