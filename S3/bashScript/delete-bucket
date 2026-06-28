@@ -20,4 +20,4 @@ fi
 
 aws s3api delete-bucket --bucket $BUCKET_NAME --region $BUCKET_REGION 
 
-echo "The Bucket HasBeen Deleted Successfully" 
+echo "=== The Bucket Has Been Deleted Successfully ===" 
