@@ -1,1 +1,21 @@
 #!/usr/bin/env bash 
+
+echo " === List A Object ===" 
+
+BUCKET_NAME=$1
+QUERY=$2
+
+
+# check for the bucket name is provided or not  
+if [ -z "$BUCKET_NAME" ]; then
+    echo "U need to spcify the bucket name" 
+    exit 2
+fi 
+
+# check for the region argument is provided or not 
+if [ -z "$QUERY" ]; then
+    echo "U need to spcify the query" 
+    exit 2 
+fi
+
+aws s3api list-object --bucket $BUCKET_NAME --query $QUERY 
