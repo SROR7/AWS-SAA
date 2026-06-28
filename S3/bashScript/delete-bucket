@@ -18,5 +18,5 @@ if [ -z "$BUCKET_REGION" ]; then
     exit 2 
 fi
 
-aws s3api create-bucket --bucket $BUCKET_NAME --region $BUCKET_REGION --create-bucket-configuration LocationConstraint=$BUCKET_REGION
+aws s3api delete-bucket --bucket $BUCKET_NAME --region $BUCKET_REGION --create-bucket-configuration LocationConstraint=$BUCKET_REGION
 
