@@ -1,1 +1,43 @@
 #!/usr/bin/env bash 
+
+set -e
+
+BUCKET_NAME=$1
+
+# check for the bucket name is provided or not  
+if [ -z "$BUCKET_NAME" ]; then
+    echo "U need to spcify the bucket name" 
+    exit 2
+fi 
+
+# Directory where files will be created
+OUTPUT_DIR="files"
+
+# if the Directory exists, so will remove it 
+rm -r $OUTPUT_DIR
+
+# Create directory if it doesn't exist
+mkdir -p $OUTPUT_DIR
+
+# Random number between 5 and 10
+num_files=$((RANDOM % 6 + 5))
+
+echo "Creating $num_files files..."
+
+for i in $(seq 1 "$num_files"); do
+    filename="$OUTPUT_DIR/file_$i.txt"
+
+    # Random size between 512 and 1535 bytes
+    size=$((RANDOM % 1024 + 512))
+
+    head -c "$size" /dev/urandom | base64 > "$filename"
+
+    echo "Created $filename"
+done
+
+echo "Done! $num_files files created."
+
+tree "$OUTPUT_DIR"
+
+# To sync the objects 
+aws s3 sync $OUTPUT_DIR s3://$BUCKET_NAME
