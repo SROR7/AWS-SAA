@@ -10,4 +10,4 @@ if [ -z "$BUCKET_NAME" ]; then
     exit 2
 fi 
 
-aws s3 rm s3://$BUCKET_NAME --recursive
+aws s3 rm s3://$BUCKET_NAME --recursiv
