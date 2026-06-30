@@ -1,4 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
+Description: simple-s3-bucket
 Resources:
   # https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-resource-s3-bucket.html
   S3Bucket:
