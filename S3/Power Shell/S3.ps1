@@ -7,7 +7,7 @@ Write-host "AWS region : $region"
 Write-host "AWS Bucket : $BucketName"
 
 function BucketExist {
-    $Bucket = Get-S3Bucket -BucketName $BucketName -ErrorAction SilentlyContiue
+    $Bucket = Get-S3Bucket -BucketName $BucketName -ErrorAction SilentlyContinue
     return $null -ne $Bucket
 }
 
