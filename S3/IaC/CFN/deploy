@@ -11,6 +11,7 @@ fi
 
 
 aws cloudformation deploy \
---template-file "template.yml \
+--template-file "template.yml" \
 --region "eu-north-1" \
---stack-name $STACKNAME
+--stack-name $STACKNAME \
+--no-execute-changeset
