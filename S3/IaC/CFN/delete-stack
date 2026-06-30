@@ -1,0 +1,15 @@
+#!/usr/bin/env bash 
+
+echo " === Delete a S3 bucket via CFN ===" 
+
+
+STACKNAME=$1
+
+if [ -z "$STACKNAME" ]; then 
+    echo "U need to spacify a stack name!" 
+    exit 2
+fi
+
+aws cloudformation delete-stack \
+--stack-name $STACKNAME \
+--region "eu-north-1"
