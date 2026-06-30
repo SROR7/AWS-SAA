@@ -8,13 +8,13 @@ BUCKET_REGION=$2
 
 # check for the bucket name is provided or not  
 if [ -z "$BUCKET_NAME" ]; then
-    echo "U need to spcify the bucket name" 
+    echo "U need to spacify the bucket name" 
     exit 2
 fi 
 
 # check for the region argument is provided or not 
 if [ -z "$BUCKET_REGION" ]; then
-    echo "U need to spcify the region" 
+    echo "U need to spacify the region" 
     exit 2 
 fi
 

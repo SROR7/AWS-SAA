@@ -1,0 +1,16 @@
+#!/usr/bin/env bash 
+
+echo " === Deploy a S3 bucket via CFN ===" 
+
+STACKNAME=$1
+
+if [ -z "$STACKNAME" ]; then 
+    echo "U need to spacify a stack name!" 
+    exit 2
+fi
+
+
+aws cloudformation deploy \
+--template-file "template.yml \
+--region "eu-north-1" \
+--stack-name $STACKNAME
