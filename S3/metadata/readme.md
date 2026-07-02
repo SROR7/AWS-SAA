@@ -12,3 +12,7 @@ aws s3api put-object --bucket metadata-sror-example --body file.txt --key file.t
 ```
 
 ## get metadata
+
+```md
+aws s3api head-object --bucket metadata-sror-example --key file.txt
+```
