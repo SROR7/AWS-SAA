@@ -13,3 +13,8 @@ aws s3 cp file.txt s3://storage-class-change-4654 --storage-class STANDARD_IA
 ```
 
 ## Cleaup
+
+```md
+aws s3 rm s3://storage-class-change-4654/file.txt
+aws s3 rb s3://storage-class-change-4654
+```
