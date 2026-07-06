@@ -1,0 +1,15 @@
+{
+    "Statement": [
+       {
+          "Effect": "Allow",
+          "Principal": {
+             "AWS": "arn:aws:iam::283277657906:user/SROR"
+          },
+          "Action": [
+             "s3:GetObject",
+             "s3:PutObject"
+          ],
+          "Resource": "arn:aws:s3:::bucket-policies-example-bucket-877/*"
+       }
+    ]
+ }
