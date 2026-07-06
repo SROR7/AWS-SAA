@@ -1,4 +1,1 @@
 $env:AWS_CLI_AUTO_PROMPT = "on-partial"
-
-
-409a2676f200143be0c6fa6cc31dc91a63dd07d578f2ee95e29120c2ec052f36
