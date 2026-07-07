@@ -32,7 +32,7 @@ for i in $(seq 1 "$num_files"); do
     # Random size between 512 and 1535 bytes
     size=$((RANDOM % 1024 + 512))
 
-    head -c "$size" /dev/urandom | base64 > "$filename"
+    base64 /dev/urandom 2>/dev/null | head -c "$size" > "$filename"
 
     echo "Created $filename"
 done
