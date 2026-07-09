@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Hi From The CORS Bucket</h1>
+    <script type="text/javascript" src="http://cors-example2-bucket-3443.s3-website.eu-north-1.amazonaws.com/main.js">
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "https://m5fqxwntue.execute-api.eu-north-1.amazonaws.com/prod", true);
+
+        xhr.setRequestHeader("Content-Type", "application/json");
+
+        xhr.onreadystatechange = () => {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            const var result = JSON.parse(this.responseText);
+            console.log(result,result)
+        }
+        };
+        xhr.send("foo=bar&lorem=ipsum");
+    </script>
+</body>
+</html>
