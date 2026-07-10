@@ -22,7 +22,7 @@ aws s3api put-object --bucket ecryption-example-bucket --key file.txt --body fil
 ```sh
 export ENCODED_KEY=$(openssl rand 32)
 echo $ENCODED_KEY
-export MD5_VALUE=$(echo -n $ENCODED_KEY | md5sum | awk '{print $1}' | base64 -w0) 
+export MD5_VALUE=$(echo -n $ENCODED_KEY | md5sum | awk '{print $1}' | base64 -w0)
 
 aws s3api put-object \
 --bucket encryption-example-bucket \
@@ -30,12 +30,18 @@ aws s3api put-object \
 --body hello.txt \
 --sse-customer-algorithm AES256 \
 --sse-customer-key $ENCODED_KEY \
---sse-customer-key-md5 $MD5_VALUE 
+--sse-customer-key-md5 $MD5_VALUE
 ```
 
-## put an object with sse-c 
+## put an object with sse-c
 
-```sh 
+```sh
 openssl rand -out ssec.key 32
-aws s3 cp file.txt s3://encryption-example-bucket/file.txt --sse-c AES256 --sse-c-key fileb://ssec.key 
+aws s3 cp file.txt s3://ecryption-example-bucket/file.txt --sse-c AES256 --sse-c-key fileb://ssec.key
+```
+
+## download the file from the bucket
+
+```sh
+aws s3 cp s3://ecryption-example-bucket/file.txt file.txt --sse-c AES256 --sse-c-key fileb://ssec.key
 ```
