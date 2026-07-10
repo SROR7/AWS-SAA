@@ -17,12 +17,25 @@ aws s3 cp file.txt s3://ecryption-example-bucket
 aws s3api put-object --bucket ecryption-example-bucket --key file.txt --body file.txt --server-side-encryption aws:kms --ssekms-key-id e5f0e30e-5bfd-443e-9161-eef9b79f54e0
 ```
 
-## put object with sse-c
+## put object with sse-c [falied attempt]
 
 ```sh
-export ENDCONDED_KEY=$(openssl rand 32 | base64)
-echo $ENDCONDED_KEY
-export MD5_VALUE=$(echo -n $ENDCONDED_KEY | base64 --decode | md5sum | awk '{print $1}' | base64) 
+export ENCODED_KEY=$(openssl rand 32)
+echo $ENCODED_KEY
+export MD5_VALUE=$(echo -n $ENCODED_KEY | md5sum | awk '{print $1}' | base64 -w0) 
 
-aws s3api put-object --bucket ecryption-example-bucket --key file.txt --body file.txt --sse-customer-algorithm AES256 --sse-customer-key $ENDCONDED_KEY --sse-customer-key-md5 $MD5_VALUE  
+aws s3api put-object \
+--bucket encryption-example-bucket \
+--key file.txt \
+--body hello.txt \
+--sse-customer-algorithm AES256 \
+--sse-customer-key $ENCODED_KEY \
+--sse-customer-key-md5 $MD5_VALUE 
+```
+
+## put an object with sse-c 
+
+```sh 
+openssl rand -out ssec.key 32
+aws s3 cp file.txt s3://encryption-example-bucket/file.txt --sse-c AES256 --sse-c-key fileb://ssec.key 
 ```
