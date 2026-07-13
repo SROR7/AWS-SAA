@@ -1,12 +1,16 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: Create A Role For US to assume and create resource we 'll have access to
-parameters:
+Parameters:
   BucketName:
-    Type: string
+    Type: String
     Default: "sts-fun-example-456"
 Resources:
+  S3Bucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: !Ref BucketName
   StsRole:
-    Type: " arn:aws:iam::283277657906:user/STS-example"
+    Type: "AWS::IAM::Role"
     Properties:
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
@@ -19,7 +23,7 @@ Resources:
               - "sts:AssumeRole"
       Path: /
       Policies:
-        - PolicyName: s3Access
+        - PolicyName: s3access
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
@@ -28,5 +32,5 @@ Resources:
                 Resource:
                   [
                     !Sub "arn:aws:s3:::${BucketName}",
-                    !Sub "arn:aws:s3:::${BucketName/*}",
+                    !Sub "arn:aws:s3:::${BucketName}/*"
                   ]
