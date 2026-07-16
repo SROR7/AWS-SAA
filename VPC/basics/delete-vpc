@@ -1,19 +1,27 @@
 #!/usr/bin/env bash
  
-# check if the argument exists 
-
-if [ -z "$1" ]; then 
-    echo "the argument does not provided"
-else
-    VPC_ID="$1"
-fi
-
 # detach the IGW 
 
-
+aws ec2 detach-internet-gateway --internet-gateway-id $IGW_ID --vpc-id $VPC_ID
 # delete the IGW 
 
+aws ec2 delete-internet-gateway --internet-gateway-id $IGW_ID
+# show up the subnet that i have 
 
+aws ec2 describe-subnets --filters "Name=vpc-id,Values=$VPC_ID" --query "Subnets[].SubnetId" --output text
+# delete the subnet 
+
+aws ec2 delete-subnet --subnet-id $SUB_ID
+
+# get the associateID 
+
+$ASSOCIATE_ID=(aws ec2 describe-route-tables --route-table-ids $RT_ID --query "RouteTables[].Associations[].RouteTableAssociationId" --output table)
+# disassociate the route table 
+
+aws ec2 disassociate-route-table --association-id $ASSOCIATE_ID
+# delte the route table 
+
+aws ec2 delete-route-table --route-table-id $RT_ID
 # delete the VPC
 
 aws ec2 delete-vpc --vpc-id $VPC_ID
