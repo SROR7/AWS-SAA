@@ -1,0 +1,61 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: vpc-peering
+
+Parameters:
+  InstanceType:
+    Type: String
+    Default: t3.micro
+
+  VpcId:
+    Type: String
+    Default: vpc-0b60bf4a38f044d8b
+
+  SubnetId:
+    Type: String
+    Default: subnet-01de641fe8e40bce4
+
+  ImageId:
+    Type: AWS::EC2::Image::Id
+    Default: ami-0a905b99668efea4b
+
+Resources:
+  SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow HTTP
+      VpcId: !Ref VpcId
+
+      SecurityGroupIngress:
+        - IpProtocol: -1
+          FromPort: -1
+          ToPort: -1
+          CidrIp: 0.0.0.0/0
+
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          FromPort: -1
+          ToPort: -1
+          CidrIp: 0.0.0.0/0
+
+  WebServer:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref ImageId
+      InstanceType: !Ref InstanceType
+      SubnetId: !Ref SubnetId
+      SecurityGroupIds:
+        - !Ref SecurityGroup
+
+      Tags:
+        - Key: Name
+          Value: Apache-WebServer
+
+Outputs:
+  InstanceId:
+    Value: !Ref WebServer
+
+  PrivateIP:
+    Value: !GetAtt WebServer.PrivateIp
+
+  PublicIP:
+    Value: !GetAtt WebServer.PublicIp
