@@ -14,7 +14,7 @@ elif command -v apt-get &> /dev/null; then
 fi
 
 # Create HTML page
-cat <<EOF > /var/www/html/index.htm
+cat <<EOF > /var/www/html/index.html
 <!DOCTYPE html>
 <html>
 <head>
