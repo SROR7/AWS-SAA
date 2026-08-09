@@ -1,0 +1,79 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Parameters:
+
+  ImageId:
+    Type: String
+    Default: ami-0734cbe7f841a2e9b
+
+  InstanceType:
+    Description: Amazon EC2 instance type for the instances
+    Type: String
+    AllowedValues:
+      - t3.micro
+      - t3.small
+      - t3.medium
+    Default: t3.micro
+
+  VpcId:
+    Type: String
+    Default: vpc-0547e7d2aad2dc466
+
+  SubnetId:
+    Type: String
+    Default: subnet-0151d49cbf1532a66
+
+Resources:
+
+  SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow HTTP
+      VpcId: !Ref VpcId
+
+      SecurityGroupIngress:
+        - IpProtocol: -1
+          FromPort: -1
+          ToPort: -1
+          CidrIp: 0.0.0.0/0
+
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          FromPort: -1
+          ToPort: -1
+          CidrIp: 0.0.0.0/0
+
+  MyEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref ImageId
+      InstanceType: !Ref InstanceType
+      SubnetId: !Ref SubnetId
+
+      SecurityGroupIds:
+        - !Ref SecurityGroup
+
+      BlockDeviceMappings:
+
+        - DeviceName: /dev/sdm
+          Ebs:
+            VolumeType: gp3
+            VolumeSize: 20
+            DeleteOnTermination: false
+
+        - DeviceName: /dev/sdk
+          NoDevice: {}
+
+Outputs:
+
+  InstanceId:
+    Description: EC2 Instance ID
+    Value: !Ref MyEC2Instance
+
+  PrivateIP:
+    Description: EC2 Private IP
+    Value: !GetAtt MyEC2Instance.PrivateIp
+
+  PublicIP:
+    Description: EC2 Public IP
+    Value: !GetAtt MyEC2Instance.PublicIp
