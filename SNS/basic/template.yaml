@@ -1,0 +1,5 @@
+AWSTemplateFormatVersion: '2010-09-09'
+# https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-resource-sns-topic.html#aws-resource-sns-topic--examples
+Resources:
+  snstopic:
+    Type: AWS::SNS::Topic
