@@ -1,0 +1,8 @@
+AWSTemplateFormatVersion: "2010-09-09"
+# https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-resource-sqs-queue.html#aws-resource-sqs-queue--examples
+Description: "Standerd SQS Queue"
+Resources: 
+  MyQueue: 
+    Type: AWS::SQS::Queue
+    # Properties: 
+      # QueueName: "StanderdQueue"
