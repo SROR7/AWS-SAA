@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+QUEUE_URL="https://sqs.eu-north-1.amazonaws.com/283277657906/SQS-FIFO-MyQueue-wwooOtn9UnKT.fifo"
+
+root_path="$(dirname "$(realpath .)")"
+message_attributes_path="${root_path}/send-message.json"
+
+echo "==== Sending The Message ===="
+
+aws sqs send-message \
+    --queue-url "$QUEUE_URL" \
+    --message-body "hello-queue-1" \
+    --message-group-id "hello"\
+    --message-deduplication-id 1 \
+    --message-attributes file://"$message_attributes_path"
+
+
+
+aws sqs send-message \
+    --queue-url "$QUEUE_URL" \
+    --message-body "hello-queue-2" \
+    --message-deduplication-id 2 \
+    --message-group-id "hello"\
+    --message-attributes file://"$message_attributes_path"
+
+
+aws sqs send-message \
+    --queue-url "$QUEUE_URL" \
+    --message-body "hello-queue-3" \
+    --message-deduplication-id 3 \
+    --message-group-id "hello"\
+    --message-attributes file://"$message_attributes_path"
+
+
+aws sqs send-message \
+    --queue-url "$QUEUE_URL" \
+    --message-body "hello-queue-4" \
+    --message-deduplication-id 4 \
+    --message-group-id "hello"\
+    --message-attributes file://"$message_attributes_path"
+
+
+aws sqs send-message \
+    --queue-url "$QUEUE_URL" \
+    --message-body "hello-queue-5" \
+    --message-deduplication-id 5 \
+    --message-group-id "hello"\
+    --message-attributes file://"$message_attributes_path"
