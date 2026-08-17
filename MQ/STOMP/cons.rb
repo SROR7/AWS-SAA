@@ -1,10 +1,10 @@
 require 'stomp'
 
 
-login = ''
-passcode = ''
-host = ''
-port = ''
+login = 'admin'
+passcode = 'Testing123456!'
+host = 'https://b-a4d99257-b800-459d-9229-dbf89bcb8eff.mq.eu-north-1.on.aws'
+port = '61614'
 
 
 config = {
