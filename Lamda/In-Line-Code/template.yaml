@@ -1,0 +1,23 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+# https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html#sam-resource-function-examples
+Resources: 
+  InLineLamda:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      Runtime: python3.15
+      CodeUri: s3://bucket-name/key-name
+      InlineCode: |
+        def handler(event, context):
+
+          message = 'Hello {} {}!'.format(
+              event['first_name'],
+              event['last_name']
+          )
+
+          print("print for me <3")
+
+          return {
+              'message': message
+          }

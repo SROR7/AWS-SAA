@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+set -e
+
+root_path=$(realpath .)
+template_path="$root_path/template.yaml"
+# config_path="$(reelpath ..)/config/$1/python.toml"
+
+# SAM Deploy
+echo "==== SAM DEPLOY ===="
+echo "==== using template: $template_path ===="
+
+sam deploy \
+  --template-file "$template_path" \
+  --stack-name my-sam-stack \
+  --capabilities CAPABILITY_IAM \
+  --region eu-north-1
+#   --config-file "$config_path" \
