@@ -1,0 +1,10 @@
+version = 0.1
+
+[default.package.parameters]
+s3_bucket = "zip-coding-1243"
+region = "eu-north-1"
+image-repository="283277657906.dkr.ecr.eu-north-1.amazonaws.com/python-container-example:latest"
+[default.deploy.parameters]
+s3_bucket = "zip-coding-1243"
+region = "eu-north-1"
+image-repository="283277657906.dkr.ecr.eu-north-1.amazonaws.com/python-container-example:latest"

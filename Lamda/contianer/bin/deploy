@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+set -e
+
+root_path=$(realpath .)
+template_path="$root_path/template.yaml"
+echo $template_path
+config_path="$(realpath .)/samconfig.toml"
+
+# SAM Deploy
+echo "==== SAM DEPLOY ===="
+echo "==== using template: $template_path ===="
+
+sam deploy \
+  --template-file "./.aws-sam/build/packaged.yaml" \
+  --stack-name "container-lamda-stack" \
+  --capabilities CAPABILITY_IAM \
+  --config-file "$config_path" \
