@@ -2,6 +2,8 @@ import json
 
 def lambda_handler(event, context):
 
+    message = 'Hello {} {}!'.format(event['frist_name'], event['last_name'])
+
     info = {
         "name": "John",
         "age": 30,
