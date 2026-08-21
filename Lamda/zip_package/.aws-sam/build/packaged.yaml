@@ -1,0 +1,11 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  InLineLamda:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      Runtime: python3.12
+      CodeUri: s3://zip-coding-1243/zip-python-package/d41d8cd98f00b204e9800998ecf8427e
+    Metadata:
+      SamResourceId: InLineLamda

@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -e
+
+root_path=$(realpath .)
+template_path="$root_path/template.yaml"
+
+# SAM Build
+echo "==== SAM BUILD ===="
+echo "==== using template: $template_path ===="
+
+sam build \
+  --use-container \
+  --template-file "$template_path"
