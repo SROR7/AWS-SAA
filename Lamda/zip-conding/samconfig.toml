@@ -1,0 +1,5 @@
+version = 0.1
+
+[default.deploy.parameters]
+s3_bucket = "zip-conding"
+region = "eu-north-1"
