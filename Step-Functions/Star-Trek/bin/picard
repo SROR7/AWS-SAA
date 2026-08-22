@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-aws s3 rm s3://star-trek-sf-54654/inputs/DevOps.jpg
+aws s3 rm s3://star-trek-sf-54654/inputs/sror.jpg
 
-aws s3 cp DevOps.jpg s3://star-trek-sf-54654/inputs/DevOps.jpg
+aws s3 cp sror.jpg s3://star-trek-sf-54654/inputs/sror.jpg
