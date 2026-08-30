@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+echo "==== Deploy EC2 instance to interact with Redis ===="
+
+STACK_NAME="ec2-redis"
+
+aws cloudformation deploy \
+--template-file template.yaml \
+--capabilities CAPABILITY_NAMED_IAM \
+--no-execute-changeset \
+--region eu-north-1 \
+--stack-name "$STACK_NAME"
