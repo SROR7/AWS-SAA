@@ -18,7 +18,7 @@ Parameters:
 
   ImageId:
     Type: AWS::EC2::Image::Id
-    Default: ami-0a905b99668efea4b
+    Default: ami-0aba19e56f3eaec05
 
   SecurityGroupId:
     Type: String
@@ -64,12 +64,13 @@ Resources:
         Fn::Base64: !Sub |
           #!/bin/bash
 
-          dnf update -y
+          sudo apt-get install lsb-release curl gpg
+          curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
+          sudo chmod 644 /usr/share/keyrings/redis-archive-keyring.gpg
+          echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list
+          sudo apt-get update
+          sudo apt-get install redis
 
-          dnf install -y redis6
-
-          systemctl enable redis6
-          systemctl start redis6
 
       Tags:
         - Key: Name
