@@ -1,0 +1,91 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Description: EC2 with Redis and SSM
+
+Parameters:
+
+  InstanceType:
+    Type: String
+    Default: t3.micro
+
+  VpcId:
+    Type: String
+    Default: vpc-0ca79c10ec4123590
+
+  SubnetId:
+    Type: String
+    Default: subnet-0741dac532f7c1446
+
+  ImageId:
+    Type: AWS::EC2::Image::Id
+    Default: ami-0aba19e56f3eaec05
+
+  SecurityGroupId:
+    Type: String
+    Default: sg-0098231e1c473e71e
+
+Resources:
+
+  EC2Role:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+
+  InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref EC2Role
+
+  WebServer:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref ImageId
+      InstanceType: !Ref InstanceType
+      SubnetId: !Ref SubnetId
+
+      SecurityGroupIds:
+        - !Ref SecurityGroupId
+
+      IamInstanceProfile: !Ref InstanceProfile
+
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+
+          sudo apt-get install lsb-release curl gpg
+          curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
+          sudo chmod 644 /usr/share/keyrings/redis-archive-keyring.gpg
+          echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list
+          sudo apt-get update
+          sudo apt-get install redis
+
+
+      Tags:
+        - Key: Name
+          Value: Redis-WebServer
+
+Outputs:
+
+  InstanceId:
+    Description: EC2 Instance ID
+    Value: !Ref WebServer
+
+  PrivateIP:
+    Description: EC2 Private IP
+    Value: !GetAtt WebServer.PrivateIp
+
+  PublicIP:
+    Description: EC2 Public IP
+    Value: !GetAtt WebServer.PublicIp
