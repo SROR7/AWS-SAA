@@ -21,4 +21,5 @@ redis-cli ping
 ## Connect To Instance 
 
 ```sh 
-redis-cli -h example-8dyrcn.serverless.eun1.cache.amazonaws.com -p 6379 --tls
+redis-cli -h example-8dyrcn.serverless.eun1.cache.amazonaws.com 
+```
