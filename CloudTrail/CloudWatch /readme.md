@@ -6,9 +6,9 @@ aws logs create-log-group --log-group-name mylogs
 
 ## Create Log Stream
 
-```sh 
+<!-- ```sh 
 aws logs create-log-stream --log-group-name mylogs --log-stream-name cloudtrail
-```
+``` -->
 
 ## Update Trail 
 
