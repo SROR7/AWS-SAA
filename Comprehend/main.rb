@@ -3,7 +3,7 @@ require 'pry'
 
 client = Aws::Comprehend::Client.new 
 
-text = "Hello World, Iam Mohamed Sror"
+text = "Hello World, This is Mohamed Sror"
 
 resp = client.detect_sentiment({
     text: text,
