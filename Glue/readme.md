@@ -16,7 +16,7 @@ https://catalog.data.gov/dataset/fy-2025-disability-compensation-recipients-by-c
 ## Upload To S3 bucket 
 
 ```sh 
-aws s3 cp export.csv s3://glue-example-5464
+aws s3 cp export.csv s3://glue-example-5464/data/
 ```
 
 
@@ -24,7 +24,7 @@ aws s3 cp export.csv s3://glue-example-5464
 
 ```sh 
 aws glue create-database \
-    --database-input "{\"Name\":\"tempdb\"}" 
+    --database-input Name=myDataBase
 ```
 
 ## Create Glue Crewler
@@ -32,9 +32,9 @@ aws glue create-database \
 ```sh 
 aws glue create-crawler \ 
     --name MyClewler \ 
-    --role \ 
-    --database-name \ 
-    --targets \ 
+    --role AWSServiceGlueRole \ 
+    --database-name myDataBase \ 
+    --targets '{"S3Targets": [{"Path}": "s3://glue-example-5464/data"}]}' \ 
     --classifiers [] \ 
-    --table-prefix
+    --table-prefix myClewler_
 ```
