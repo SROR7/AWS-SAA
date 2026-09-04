@@ -332,6 +332,16 @@ Resources:
 
           systemctl start httpd
 
+          sudo dnf update -y
+
+          sudo dnf install -y postgresql15-server postgresql15
+
+          sudo postgresql-setup --initdb
+
+          sudo systemctl enable postgresql
+
+          sudo systemctl start postgresql
+
           echo "<h1>Web Server is Running</h1>" > /var/www/html/index.html
 
 Outputs:
