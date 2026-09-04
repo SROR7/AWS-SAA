@@ -1,0 +1,357 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Description: >
+  Web Server + RDS PostgreSQL + Secrets Manager
+
+Parameters:
+
+  VpcCIDR:
+    Type: String
+    Default: 10.0.0.0/16
+
+  PublicSubnetCIDR:
+    Type: String
+    Default: 10.0.1.0/24
+
+  DBSubnet1CIDR:
+    Type: String
+    Default: 10.0.2.0/24
+
+  DBSubnet2CIDR:
+    Type: String
+    Default: 10.0.3.0/24
+
+  InstanceType:
+    Type: String
+    Default: t3.micro
+
+  DBInstanceClass:
+    Type: String
+    Default: db.t3.micro
+
+  DBName:
+    Type: String
+    Default: myappdb
+
+  DBUsername:
+    Type: String
+    Default: postgres
+
+Resources:
+
+  # -------------------------
+  # VPC
+  # -------------------------
+
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref VpcCIDR
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: WebAppVPC
+
+  # -------------------------
+  # Internet Gateway
+  # -------------------------
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
+
+  # -------------------------
+  # Public Subnet
+  # -------------------------
+
+  PublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: !Ref PublicSubnetCIDR
+      AvailabilityZone: !Select [0, !GetAZs ""]
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: WebServerSubnet
+
+  # -------------------------
+  # Private DB Subnet 1
+  # -------------------------
+
+  DBSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: !Ref DBSubnet1CIDR
+      AvailabilityZone: !Select [0, !GetAZs ""]
+      Tags:
+        - Key: Name
+          Value: DBSubnet1
+
+  # -------------------------
+  # Private DB Subnet 2
+  # -------------------------
+
+  DBSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: !Ref DBSubnet2CIDR
+      AvailabilityZone: !Select [1, !GetAZs ""]
+      Tags:
+        - Key: Name
+          Value: DBSubnet2
+
+  # -------------------------
+  # Route Table
+  # -------------------------
+
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+
+  PublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: AttachGateway
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+
+  PublicSubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicSubnet
+
+  # -------------------------
+  # Web Server Security Group
+  # -------------------------
+
+  WebServerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow HTTP and SSH
+      VpcId: !Ref VPC
+
+      SecurityGroupIngress:
+
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+
+  # -------------------------
+  # RDS Security Group
+  # -------------------------
+
+  RDSSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow PostgreSQL from Web Server
+      VpcId: !Ref VPC
+
+      SecurityGroupIngress:
+
+        - IpProtocol: tcp
+          FromPort: 5432
+          ToPort: 5432
+          SourceSecurityGroupId: !Ref WebServerSecurityGroup
+
+  # -------------------------
+  # Secrets Manager
+  # -------------------------
+
+  DBSecret:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: !Sub "${AWS::StackName}/postgres-secret"
+
+      Description: PostgreSQL credentials
+
+      GenerateSecretString:
+        SecretStringTemplate: !Sub |
+          {
+            "username": "${DBUsername}"
+          }
+
+        GenerateStringKey: password
+
+        PasswordLength: 32
+
+        ExcludeCharacters: '"@/\'
+
+  # -------------------------
+  # RDS Subnet Group
+  # -------------------------
+
+  DBSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: PostgreSQL DB subnet group
+
+      SubnetIds:
+        - !Ref DBSubnet1
+        - !Ref DBSubnet2
+
+  # -------------------------
+  # RDS PostgreSQL
+  # -------------------------
+
+  PostgreSQL:
+    Type: AWS::RDS::DBInstance
+    Properties:
+
+      DBInstanceIdentifier: postgres-database
+
+      Engine: postgres
+
+      DBInstanceClass: !Ref DBInstanceClass
+
+      AllocatedStorage: 20
+
+      StorageType: gp3
+
+      DBName: !Ref DBName
+
+      MasterUsername: !Sub "{{resolve:secretsmanager:${DBSecret}:SecretString:username}}"
+
+      MasterUserPassword: !Sub "{{resolve:secretsmanager:${DBSecret}:SecretString:password}}"
+
+      Port: 5432
+
+      VPCSecurityGroups:
+        - !Ref RDSSecurityGroup
+
+      DBSubnetGroupName: !Ref DBSubnetGroup
+
+      PubliclyAccessible: false
+
+      BackupRetentionPeriod: 7
+
+      MultiAZ: false
+
+      StorageEncrypted: true
+
+      DeletionProtection: false
+
+  # -------------------------
+  # IAM Role for EC2
+  # -------------------------
+
+  WebServerRole:
+    Type: AWS::IAM::Role
+    Properties:
+
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+
+        Statement:
+
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+
+            Action:
+              - sts:AssumeRole
+
+      Policies:
+
+        - PolicyName: ReadDBSecret
+
+          PolicyDocument:
+            Version: "2012-10-17"
+
+            Statement:
+
+              - Effect: Allow
+
+                Action:
+                  - secretsmanager:GetSecretValue
+
+                Resource:
+                  - !Ref DBSecret
+
+  # -------------------------
+  # Instance Profile
+  # -------------------------
+
+  WebServerInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref WebServerRole
+
+  # -------------------------
+  # Web Server
+  # -------------------------
+
+  WebServer:
+    Type: AWS::EC2::Instance
+
+    Properties:
+
+      InstanceType: !Ref InstanceType
+
+      ImageId: !Sub "{{resolve:ssm:/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64}}"
+
+      SubnetId: !Ref PublicSubnet
+
+      SecurityGroupIds:
+        - !Ref WebServerSecurityGroup
+
+      IamInstanceProfile: !Ref WebServerInstanceProfile
+
+      Tags:
+        - Key: Name
+          Value: WebServer
+
+      UserData:
+        Fn::Base64: |
+          #!/bin/bash
+
+          dnf update -y
+
+          dnf install -y httpd
+
+          systemctl enable httpd
+
+          systemctl start httpd
+
+          echo "<h1>Web Server is Running</h1>" > /var/www/html/index.html
+
+Outputs:
+
+  WebServerPublicIP:
+    Description: Web Server Public IP
+    Value: !GetAtt WebServer.PublicIp
+
+  WebServerURL:
+    Description: Web Server URL
+    Value: !Sub "http://${WebServer.PublicIp}"
+
+  DatabaseEndpoint:
+    Description: PostgreSQL Endpoint
+    Value: !GetAtt PostgreSQL.Endpoint.Address
+
+  DatabasePort:
+    Description: PostgreSQL Port
+    Value: !GetAtt PostgreSQL.Endpoint.Port
+
+  DBSecretARN:
+    Description: Secrets Manager Secret ARN
+    Value: !Ref DBSecret

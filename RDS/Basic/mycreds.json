@@ -1,0 +1,11 @@
+{
+    "engine": "postgres",
+    "host": "<instance host name/resolvable DNS name>",
+    "username": "postgres",
+    "password": "<password>",
+    "dbname": "<database name. If not specified, defaults to 'postgres'>",
+    "port": "5432",
+    "masterarn": "<optional: ARN of the elevated secret. Required for the Rotation strategy: alternating users.>",
+    "dbInstanceIdentifier": "",
+    "dbClusterIdentifier": ""
+  }
