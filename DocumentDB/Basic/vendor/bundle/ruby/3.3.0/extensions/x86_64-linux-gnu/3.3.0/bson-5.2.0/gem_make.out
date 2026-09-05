@@ -1,0 +1,27 @@
+current directory: /home/sror/Code/AWS-SAA/DocumentDB/Basic/vendor/bundle/ruby/3.3.0/gems/bson-5.2.0/ext/bson
+/usr/bin/ruby3.3 -I/usr/lib/ruby/vendor_ruby extconf.rb
+checking for whether -Wall is accepted as CFLAGS... yes
+checking for whether -g is accepted as CFLAGS... yes
+checking for whether -std=c99 is accepted as CFLAGS... yes
+creating Makefile
+
+current directory: /home/sror/Code/AWS-SAA/DocumentDB/Basic/vendor/bundle/ruby/3.3.0/gems/bson-5.2.0/ext/bson
+make DESTDIR\= sitearchdir\=./.gem.20260905-29631-xp84fq sitelibdir\=./.gem.20260905-29631-xp84fq clean
+
+current directory: /home/sror/Code/AWS-SAA/DocumentDB/Basic/vendor/bundle/ruby/3.3.0/gems/bson-5.2.0/ext/bson
+make DESTDIR\= sitearchdir\=./.gem.20260905-29631-xp84fq sitelibdir\=./.gem.20260905-29631-xp84fq
+compiling bytebuf.c
+compiling endian.c
+compiling init.c
+compiling libbson-utf8.c
+compiling read.c
+compiling util.c
+compiling write.c
+linking shared-object bson_native.so
+
+current directory: /home/sror/Code/AWS-SAA/DocumentDB/Basic/vendor/bundle/ruby/3.3.0/gems/bson-5.2.0/ext/bson
+make DESTDIR\= sitearchdir\=./.gem.20260905-29631-xp84fq sitelibdir\=./.gem.20260905-29631-xp84fq install
+/usr/bin/install -c -m 0755 bson_native.so ./.gem.20260905-29631-xp84fq
+
+current directory: /home/sror/Code/AWS-SAA/DocumentDB/Basic/vendor/bundle/ruby/3.3.0/gems/bson-5.2.0/ext/bson
+make DESTDIR\= sitearchdir\=./.gem.20260905-29631-xp84fq sitelibdir\=./.gem.20260905-29631-xp84fq clean
